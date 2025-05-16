@@ -5,6 +5,7 @@ import asyncio
 import uvicorn
 from .api import app
 
+
 def main():
     config = parse_args()
     money_storage.set_amounts(config['balances'])

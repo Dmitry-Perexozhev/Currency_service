@@ -34,13 +34,18 @@ class RatesStorage:
 class ConfigStorage:
     def __init__(self):
         self._config: Dict[str, int | bool] = {}
+        self._config["period"] = 5
+        self._config["debug"] = False
 
     def set_config(self, period: int, debug: bool):
         self._config["period"] = period
         self._config["debug"] = debug
 
-    def get_config(self, config_name: str) -> bool | int:
-        return self._config[config_name]
+    def get_period(self) -> int:
+        return self._config["period"]
+
+    def get_debug(self) -> bool:
+        return self._config["debug"]
 
 
 money_storage = MoneyStorage()

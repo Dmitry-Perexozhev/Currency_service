@@ -1,18 +1,45 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from .storage import rates_storage, config_storage, money_storage
 from .rates_fetcher import get_rates
 import asyncio
 
 
 async def lifespan(app: FastAPI):
-    # при старте приложения
-    task = asyncio.create_task(get_rates(rates_storage, config_storage.get_config("period")))
+    task = asyncio.create_task(
+        get_rates(
+            rates_storage,
+            config_storage.get_period()
+        )
+    )
     yield
-    # при завершении приложения
     task.cancel()
 
 app = FastAPI(lifespan=lifespan)
 
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    if config_storage.get_debug():
+        body = await request.body()
+        print(f"\n[DEBUG] Request: {request.method} {request.url}")
+        print(f"Headers: {dict(request.headers)}")
+        print(f"Body: {body.decode() if body else 'No body'}\n")
+
+    response = await call_next(request)
+
+    if config_storage.get_debug():
+        response_body = b""
+        async for chunk in response.body_iterator:
+            response_body += chunk
+
+        async def fake_body_iterator():
+            yield response_body
+
+        response.body_iterator = fake_body_iterator()
+        print(f"[DEBUG] Response status: {response.status_code}")
+        print(f"Body: {response_body.decode()}\n")
+
+    return response
 
 @app.get("/amount/get")
 async def get_amounts():
