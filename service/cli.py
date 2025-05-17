@@ -1,5 +1,6 @@
 import argparse
-
+from service.logging_config import get_logger
+logger = get_logger(__name__, "cli.log")
 
 def str2bool(value: str) -> bool:
     true_values = {'1', 'true', 'True', 'y', 'Y'}
@@ -34,10 +35,14 @@ def parse_args():
             balances[currency] = amount
 
     if not balances:
+        logger.error("Не указана ни одна валюта")
         raise ValueError("Нужно указать хотя бы одну валюту: --usd, --rub или --eur")
 
-    return {
+    result = {
         "period": args.period,
         "debug": args.debug,
         "balances": balances,
     }
+
+    logger.info(f"Аргументы командной строки: {result}")
+    return result

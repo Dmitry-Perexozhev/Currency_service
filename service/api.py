@@ -2,9 +2,11 @@ from fastapi import FastAPI, HTTPException, Request
 from .storage import rates_storage, config_storage, money_storage
 from .rates_fetcher import get_rates
 import asyncio
-
+from service.logging_config import get_logger
+logger = get_logger(__name__, "api.log")
 
 async def lifespan(app: FastAPI):
+    logger.info("Starting background task to fetch rates.")
     task = asyncio.create_task(
         get_rates(
             rates_storage,
@@ -13,6 +15,7 @@ async def lifespan(app: FastAPI):
     )
     yield
     task.cancel()
+    logger.info("Background task cancelled.")
 
 app = FastAPI(lifespan=lifespan)
 
@@ -43,6 +46,7 @@ async def log_requests(request: Request, call_next):
 
 @app.get("/amount/get")
 async def get_amounts():
+    logger.info("Fetching all amounts and calculating totals.")
 
     usd = money_storage.get_amount("usd")
     eur = money_storage.get_amount("eur")
@@ -76,7 +80,9 @@ async def get_amounts():
 async def get_currency_amount(currency: str):
     currency = currency.lower()
     if currency not in {"usd", "eur", "rub"}:
+        logger.warning(f"Attempt to access unsupported currency: {currency}")
         raise HTTPException(status_code=404, detail="Currency not supported")
+    logger.info(f"Fetching amount for currency: {currency.upper()}")
     return {
         "name": currency.upper(),
         "value": money_storage.get_amount(currency)
@@ -86,10 +92,12 @@ async def get_currency_amount(currency: str):
 @app.post("/amount/set")
 async def set_amounts(amounts: dict):
     money_storage.set_amounts(amounts)
+    logger.info(f"Amounts set: {amounts}")
     return {"message": "Amounts set successfully"}
 
 
 @app.post("/modify")
 async def modify_amounts(changes: dict):
     money_storage.modify_amounts(changes)
+    logger.info(f"Amounts modified: {changes}")
     return {"message": "Amounts modified successfully"}
