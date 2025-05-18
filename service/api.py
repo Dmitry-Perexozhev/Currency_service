@@ -1,20 +1,25 @@
 from fastapi import FastAPI, HTTPException, Request
 from .storage import rates_storage, config_storage, money_storage
-from .rates_fetcher import get_rates
+from service.tasks.rates_fetcher import get_rates
+from service.utils import get_amounts_data
+from service.tasks.monitor_amounts import monitor_amounts
 import asyncio
-from service.logging_config import get_logger
-logger = get_logger(__name__, "api.log")
+import logging
+
+logger = logging.getLogger('api')
 
 async def lifespan(app: FastAPI):
     logger.info("Starting background task to fetch rates.")
-    task = asyncio.create_task(
+    task_rates = asyncio.create_task(
         get_rates(
             rates_storage,
             config_storage.get_period()
         )
     )
+    task_monitor = asyncio.create_task(monitor_amounts())
     yield
-    task.cancel()
+    task_rates.cancel()
+    task_monitor.cancel()
     logger.info("Background task cancelled.")
 
 app = FastAPI(lifespan=lifespan)
@@ -46,35 +51,7 @@ async def log_requests(request: Request, call_next):
 
 @app.get("/amount/get")
 async def get_amounts():
-    logger.info("Fetching all amounts and calculating totals.")
-
-    usd = money_storage.get_amount("usd")
-    eur = money_storage.get_amount("eur")
-    rub = money_storage.get_amount("rub")
-
-    rub_usd = rates_storage.get_rates()['usd']
-    rub_eur = rates_storage.get_rates()['eur']
-
-    usd_eur = rub_usd / rub_eur if rub_eur else 0.0
-
-    total_rub = usd * rub_usd + eur * rub_eur + rub
-    total_usd = total_rub / rub_usd if rub_usd else 0.0
-    total_eur = total_rub / rub_eur if rub_eur else 0.0
-
-    return {
-        "rub": rub,
-        "usd": usd,
-        "eur": eur,
-        "rub-usd": rub_usd,
-        "rub-eur": rub_eur,
-        "usd-eur": usd_eur,
-        "sum": {
-            "rub": round(total_rub, 2),
-            "usd": round(total_usd, 2),
-            "eur": round(total_eur, 2)
-        }
-    }
-
+    return get_amounts_data()
 
 @app.get("/{currency}/get")
 async def get_currency_amount(currency: str):

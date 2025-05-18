@@ -1,7 +1,8 @@
 from typing import Dict
-from service.logging_config import get_logger
+import logging
 
-logger = get_logger(__name__, "storage.log")
+
+logger = logging.getLogger('storage')
 
 
 class MoneyStorage:
@@ -12,6 +13,9 @@ class MoneyStorage:
         amount = self._amounts.get(currency.lower(), 0.0)
         logger.debug(f"Получено значение {amount} для валюты {currency.upper()}")
         return amount
+
+    def get_amounts(self):
+        return self._amounts
 
     def set_amounts(self, values: Dict[str, str]) -> None:
         for k, v in values.items():
@@ -48,7 +52,6 @@ class ConfigStorage:
     def set_config(self, period: int, debug: bool):
         self._config["period"] = period
         self._config["debug"] = debug
-        logger.info(f"Установлена конфигурация: period={period}, debug={debug}")
 
     def get_period(self) -> int:
         return self._config["period"]

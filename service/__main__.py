@@ -1,17 +1,24 @@
+import service.storage
 from service import api
 from .cli import parse_args
 from .storage import money_storage, config_storage
 import asyncio
 import uvicorn
 from .api import app
-from service.logging_config import get_logger
-logger = get_logger(__name__, "__main__.log")
+from service.logging_config import init_logger
+import logging
+
 
 def main():
     config = parse_args()
 
+    init_logger(config["debug"], "__main__.log")
+    logger = logging.getLogger('__main__')
+
     money_storage.set_amounts(config['balances'])
     logger.info(f"Установлены начальные балансы: {config['balances']}")
+
+    # service.storage.debug = config["debug"]
 
     config_storage.set_config(config["period"], config["debug"])
     logger.info(f"Период обновления курса: {config['period']} мин. Режим отладки: {config['debug']}")

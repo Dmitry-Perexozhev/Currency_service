@@ -1,6 +1,8 @@
 import argparse
-from service.logging_config import get_logger
-logger = get_logger(__name__, "cli.log")
+import logging
+
+logger = logging.getLogger('cli')
+
 
 def str2bool(value: str) -> bool:
     true_values = {'1', 'true', 'True', 'y', 'Y'}

@@ -1,28 +1,19 @@
 import httpx
 import logging
 from typing import Dict
-from .storage import RatesStorage
 import asyncio
-from service.logging_config import get_logger
-logger = get_logger(__name__, "rates_fetcher.log")
+from service.storage import RatesStorage
+from service.provider import CBRRatesProvider
+logger = logging.getLogger('rates_fetcher')
+
 
 async def get_rates(rate_storage: RatesStorage, period: int) -> Dict[str, float]:
-    URL = "https://www.cbr-xml-daily.ru/daily_json.js"
     logger.info(f"Запущена фоновая задача получения курсов валют с периодичностью {period} минут.")
+    provider = CBRRatesProvider()
     while True:
         logger.debug("Начало нового цикла получения курсов.")
         try:
-            async with httpx.AsyncClient() as client:
-                response = await client.get(URL)
-                response.raise_for_status()
-                data = response.json()
-
-            valute = data.get("Valute", {})
-            rates = {
-                "usd": valute.get("USD", {}).get("Value"),
-                "eur": valute.get("EUR", {}).get("Value"),
-                "rub": 1.0,
-            }
+            rates = await provider.fetch_rates()
             rate_storage.set_rates(rates)
             logger.info(f"Курсы обновлены: {rates}")
         except Exception as e:
