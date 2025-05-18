@@ -48,10 +48,10 @@ poetry install
 
 - Run the application via CLI. Example:
 ```
-python3 -m service --rub 1000 --usd 2000 --eur 3000 --period 10 --debug True
+python3 -m service --rub 1000 --gbp 2000 --vnd 3000 --period 10 --debug True
 ```
 - `--period N` — period in minutes for fetching exchange rate data (required).  
-- `--rub 1000`, `--usd 2000`, etc. — initial currency amounts. At least one currency amount must be provided.  
+- `--rub 1000`, `--gbp 2000`, etc. — initial currency amounts. All currencies that are in the source URL are available. At least one currency amount must be provided.  
 - `--debug True` — enables debug mode, printing request and response details to the console. Accepts `0`, `1`, `true`, `false`, `y`, `n` (case-insensitive). Optional, defaults to `false`.
 
 - API Endpoints:  
