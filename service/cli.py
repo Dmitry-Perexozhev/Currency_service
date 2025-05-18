@@ -1,8 +1,9 @@
 import argparse
 from service.utils import is_valid_currency
-from service.logging_config import get_logger
 
-logger = get_logger(__name__, "cli.log")
+import logging
+
+logger = logging.getLogger("cli")
 
 
 def parse_debug_flag(value: str) -> bool:

@@ -4,9 +4,9 @@ from service.api.middleware import log_requests
 from service.api.lifespan import lifespan
 from service.storage.money_storage import money_storage
 from service.utils import get_amounts_data
-from service.logging_config import get_logger
+import logging
 
-logger = get_logger(__name__, "app.log")
+logger = logging.getLogger("app")
 
 
 app = FastAPI(lifespan=lifespan)

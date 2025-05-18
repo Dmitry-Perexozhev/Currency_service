@@ -6,9 +6,10 @@ from service.storage.config_storage import config_storage
 from service.tasks.rates_fetcher import get_rates
 from service.tasks.monitor_amounts import monitor_amounts
 
+import logging
 
-from service.logging_config import get_logger
-logger = get_logger(__name__, "lifespan.log")
+logger = logging.getLogger("lifespan")
+
 
 async def lifespan(app: FastAPI):
     logger.info("Starting background task to fetch rates.")

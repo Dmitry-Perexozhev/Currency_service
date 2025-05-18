@@ -1,7 +1,8 @@
-from typing import Dict
-from service.logging_config import get_logger
+import logging
 
-logger = get_logger(__name__, "money_storage.log")
+logger = logging.getLogger("money_storage")
+
+from typing import Dict
 
 
 class MoneyStorage:

@@ -7,8 +7,11 @@ from typing import Dict, Set
 from service.config import RATES_PROVIDERS_URLS
 from service.storage.money_storage import money_storage
 
-from service.logging_config import get_logger
-logger = get_logger(__name__, "provider.log")
+
+import logging
+
+logger = logging.getLogger("provider")
+
 
 class RatesProvider(ABC):
     @abstractmethod

@@ -1,7 +1,9 @@
 from typing import Dict
-from service.logging_config import get_logger
 
-logger = get_logger(__name__, "config_storage.log")
+import logging
+
+logger = logging.getLogger("config_storage")
+
 
 class ConfigStorage:
     def __init__(self):

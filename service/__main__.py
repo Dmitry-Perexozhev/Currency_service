@@ -4,13 +4,18 @@ from service.cli import parse_args
 from service.storage.money_storage import money_storage
 from service.storage.config_storage import config_storage
 from service.api.app import app
-from service.logging_config import get_logger
 
-logger = get_logger(__name__, "__main__.log")
+
+from logging.config import dictConfig
+from service.logging_config import LOGGING_CONFIG
+dictConfig(LOGGING_CONFIG)
+import logging
+
+logger = logging.getLogger("main")
 
 
 def main():
-    logger.info(f"Start current service app")
+    logger.info(f"Start currency service app")
 
     config = parse_args()
 
@@ -22,7 +27,7 @@ def main():
 
 
     logger.info("Launch FastAPI application")
-    uvicorn.run(app, host="127.0.0.1", port=8000, lifespan="on", log_config=None)
+    uvicorn.run(app, host="127.0.0.1", port=8000, lifespan="on")
 
 
 if __name__ == "__main__":

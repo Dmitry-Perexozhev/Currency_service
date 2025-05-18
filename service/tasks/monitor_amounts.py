@@ -2,10 +2,14 @@ import asyncio
 from service.utils import get_amounts_data
 from service.storage.money_storage import money_storage
 from service.storage.rates_storage import rates_storage
-from service.logging_config import get_logger
-logger = get_logger(__name__, "monitor_amounts.log")
+
+import logging
+
+logger = logging.getLogger("monitor_amounts")
+
 
 async def monitor_amounts():
+    logger.info("Start monitor_amounts")
     prev_amounts = None
     prev_rates = None
 

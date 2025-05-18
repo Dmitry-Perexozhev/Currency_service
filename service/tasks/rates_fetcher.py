@@ -2,9 +2,11 @@ import asyncio
 from typing import Dict
 from service.provider import CBRRatesProvider
 from service.storage.rates_storage import rates_storage
-from service.logging_config import get_logger
 
-logger = get_logger(__name__, "rates_fetcher.log")
+import logging
+
+logger = logging.getLogger("rates_fetcher")
+
 
 async def get_rates(period: int) -> Dict[str, float]:
     logger.info(f"Run a background task to get exchange rates every {period} minutes.")

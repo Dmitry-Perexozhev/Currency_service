@@ -1,7 +1,9 @@
 from typing import Dict
-from service.logging_config import get_logger
 
-logger = get_logger(__name__, "rates_storage.log")
+import logging
+
+logger = logging.getLogger("rates_storage")
+
 
 
 class RatesStorage:
