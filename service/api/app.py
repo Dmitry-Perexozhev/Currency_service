@@ -6,7 +6,8 @@ from service.storage.money_storage import money_storage
 from service.utils import get_amounts_data
 from service.logging_config import get_logger
 
-logger = get_logger(__name__, "api.log")
+logger = get_logger(__name__, "app.log")
+
 
 app = FastAPI(lifespan=lifespan)
 app.middleware("http")(log_requests)

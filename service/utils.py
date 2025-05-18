@@ -2,7 +2,9 @@ from typing import Dict
 
 from service.config import RATES_PROVIDERS_URLS
 from service.provider import fetch_available_currencies
-from service.storage import money_storage, rates_storage
+from service.storage.money_storage import money_storage
+from service.storage.rates_storage import rates_storage
+
 
 def get_amounts_data() -> Dict:
     usd = money_storage.get_amount("usd")
@@ -21,7 +23,6 @@ def get_amounts_data() -> Dict:
     total_eur = total_rub / rub_eur if rub_eur else 0.0
 
     return {
-        **money_storage.get_amounts(),
         **rates_storage.get_rates()
         # "rub": rub,
         # "usd": usd,

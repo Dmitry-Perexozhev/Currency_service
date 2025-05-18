@@ -1,8 +1,9 @@
 import asyncio
-import logging
 from service.utils import get_amounts_data
-from service.storage import money_storage, rates_storage
-logger = logging.getLogger('amount_logger')
+from service.storage.money_storage import money_storage
+from service.storage.rates_storage import rates_storage
+from service.logging_config import get_logger
+logger = get_logger(__name__, "monitor_amounts.log")
 
 async def monitor_amounts():
     prev_amounts = None
@@ -13,10 +14,10 @@ async def monitor_amounts():
         current_rates = rates_storage.get_rates().copy()
 
         if prev_amounts is not None and prev_rates is not None:
-            # Сравниваем текущие и предыдущие данные
             if current_amounts != prev_amounts or current_rates != prev_rates:
+                logger.info("The exchange rate or balance of funds has changed")
                 output = get_amounts_data()
-                print(f"Изменения в балансах или курсах:\n{output}")
+                print(output)
 
         prev_amounts = current_amounts
         prev_rates = current_rates
