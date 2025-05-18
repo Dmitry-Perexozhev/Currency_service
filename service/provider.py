@@ -4,7 +4,7 @@ import requests
 from abc import ABC, abstractmethod
 from typing import Dict, Set
 
-from service.config import RATES_PROVIDERS_URLS
+from service.rates_url import RATES_PROVIDERS_URLS
 from service.storage.money_storage import money_storage
 
 

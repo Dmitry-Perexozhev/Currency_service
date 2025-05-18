@@ -12,19 +12,22 @@ dictConfig(LOGGING_CONFIG)
 import logging
 
 logger = logging.getLogger("main")
-
+logger_console = logging.getLogger("console")
 
 def main():
-    logger.info(f"Start currency service app")
+    start_mes = f"Start currency service app"
 
     config = parse_args()
 
+    logger.info(start_mes) if config['debug'] else logger_console.info(start_mes)
+
     money_storage.set_amounts(config['balances'])
-    logger.info(f"Setting initial balance values: {config['balances']}")
+
+    balance_mes = f"Setting initial balance values: {config['balances']}"
+    logger.info(balance_mes) if config['debug'] else logger_console.info(balance_mes)
 
     config_storage.set_config(config["period"], config["debug"])
     logger.info(f"Rate update period: {config['period']} min. Debug mode: {config['debug']}")
-
 
     logger.info("Launch FastAPI application")
     uvicorn.run(app, host="127.0.0.1", port=8000, lifespan="on")

@@ -4,7 +4,7 @@ from service.utils import is_valid_currency
 import logging
 
 logger = logging.getLogger("cli")
-
+logger_console = logging.getLogger("console")
 
 def parse_debug_flag(value: str) -> bool:
     true_values = {'1', 'true', 'True', 'y', 'Y'}
@@ -45,7 +45,7 @@ def parse_args():
             else:
                 msg = f"Unknown currency {currency}"
                 logger.warning(msg)
-                print(msg)
+                logger_console.warning(msg)
             i += 2
         else:
             msg = f"Invalid argument format"
