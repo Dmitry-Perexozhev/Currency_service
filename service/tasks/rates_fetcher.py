@@ -12,8 +12,10 @@ async def get_rates(rate_storage: RatesStorage, period: int) -> Dict[str, float]
     provider = CBRRatesProvider()
     while True:
         logger.debug("Начало нового цикла получения курсов.")
+        print("Начало нового цикла получения курсов.")
         try:
             rates = await provider.fetch_rates()
+            print("rates")
             rate_storage.set_rates(rates)
             logger.info(f"Курсы обновлены: {rates}")
         except Exception as e:

@@ -4,12 +4,13 @@ from service.tasks.rates_fetcher import get_rates
 from service.utils import get_amounts_data
 from service.tasks.monitor_amounts import monitor_amounts
 import asyncio
-import logging
+from service.logging_config import get_logger
+logger = get_logger(__name__, "api.log")
 
-logger = logging.getLogger('api')
 
 async def lifespan(app: FastAPI):
     logger.info("Starting background task to fetch rates.")
+    print("Starting background task to fetch rates.")
     task_rates = asyncio.create_task(
         get_rates(
             rates_storage,
