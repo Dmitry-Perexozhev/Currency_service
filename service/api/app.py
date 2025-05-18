@@ -1,13 +1,13 @@
-from fastapi import FastAPI, HTTPException
-
-from service.api.middleware import log_requests
-from service.api.lifespan import lifespan
-from service.storage.money_storage import money_storage
-from service.utils import get_amounts_data
 import logging
 
-logger = logging.getLogger("app")
+from fastapi import FastAPI, HTTPException
 
+from service.api.lifespan import lifespan
+from service.api.middleware import log_requests
+from service.storage.money_storage import money_storage
+from service.utils import get_amounts_data
+
+logger = logging.getLogger("app")
 
 app = FastAPI(lifespan=lifespan)
 app.middleware("http")(log_requests)

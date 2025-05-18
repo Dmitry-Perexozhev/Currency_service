@@ -1,12 +1,13 @@
 import asyncio
-from service.utils import get_amounts_data
+import logging
+
 from service.storage.money_storage import money_storage
 from service.storage.rates_storage import rates_storage
-
-import logging
+from service.utils import get_amounts_data
 
 logger = logging.getLogger("monitor_amounts")
 logger_console = logging.getLogger("console")
+
 
 async def monitor_amounts():
     logger.info("Start monitor_amounts")

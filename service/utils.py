@@ -1,7 +1,8 @@
-from typing import Dict
 from itertools import combinations
-from service.rates_url import RATES_PROVIDERS_URLS
+from typing import Dict
+
 from service.provider import fetch_available_currencies
+from service.rates_url import RATES_PROVIDERS_URLS
 from service.storage.money_storage import money_storage
 from service.storage.rates_storage import rates_storage
 

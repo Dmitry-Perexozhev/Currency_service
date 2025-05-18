@@ -1,11 +1,11 @@
-from typing import Dict
-
 import logging
+from typing import Dict
 
 logger = logging.getLogger("config_storage")
 
 
 class ConfigStorage:
+
     def __init__(self):
         self._config: Dict[str, int | bool] = {"period": 5, "debug": False}
 
@@ -21,5 +21,6 @@ class ConfigStorage:
     def get_debug(self) -> bool:
         logger.debug(f"Get period: {self._config["debug"]}")
         return self._config["debug"]
+
 
 config_storage = ConfigStorage()

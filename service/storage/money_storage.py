@@ -1,8 +1,7 @@
 import logging
+from typing import Dict
 
 logger = logging.getLogger("money_storage")
-
-from typing import Dict
 
 
 class MoneyStorage:
@@ -27,5 +26,6 @@ class MoneyStorage:
             k = k.lower()
             self._amounts[k] = self._amounts.get(k, 0.0) + float(v)
             logger.info(f"Modify value for {k} to {v}")
+
 
 money_storage = MoneyStorage()

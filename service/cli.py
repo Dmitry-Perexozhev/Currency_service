@@ -1,10 +1,11 @@
 import argparse
-from service.utils import is_valid_currency
-
 import logging
+
+from service.utils import is_valid_currency
 
 logger = logging.getLogger("cli")
 logger_console = logging.getLogger("console")
+
 
 def parse_debug_flag(value: str) -> bool:
     true_values = {'1', 'true', 'True', 'y', 'Y'}
@@ -20,10 +21,21 @@ def parse_debug_flag(value: str) -> bool:
 def parse_args():
     parser = argparse.ArgumentParser(description="Asynchronous currency service")
 
-    parser.add_argument('--period', type=int, required=True, help='Exchange rate request period in minutes')
+    parser.add_argument(
+        '--period',
+        type=int,
+        required=True,
+        help='Exchange rate request period in minutes'
+    )
 
-    parser.add_argument('--debug', type=parse_debug_flag, nargs='?', const=True, default=False,
-                        help='Debug mode (true/false/1/0/y/n)')
+    parser.add_argument(
+        '--debug',
+        type=parse_debug_flag,
+        nargs='?',
+        const=True,
+        default=False,
+        help='Debug mode (true/false/1/0/y/n)'
+    )
 
     known_args, unknown_args = parser.parse_known_args()
 
@@ -48,7 +60,7 @@ def parse_args():
                 logger_console.warning(msg)
             i += 2
         else:
-            msg = f"Invalid argument format"
+            msg = "Invalid argument format"
             logger.error(msg)
             raise ValueError(msg + ". Enter arguments in the form --currency value. Example --usd 1000")
 

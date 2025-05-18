@@ -1,14 +1,12 @@
-import httpx
-import requests
-
+import logging
 from abc import ABC, abstractmethod
 from typing import Dict, Set
 
+import httpx
+import requests
+
 from service.rates_url import RATES_PROVIDERS_URLS
 from service.storage.money_storage import money_storage
-
-
-import logging
 
 logger = logging.getLogger("provider")
 

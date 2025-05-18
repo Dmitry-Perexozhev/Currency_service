@@ -1,12 +1,11 @@
 import asyncio
+import logging
+
 from fastapi import FastAPI
 
-
 from service.storage.config_storage import config_storage
-from service.tasks.rates_fetcher import get_rates
 from service.tasks.monitor_amounts import monitor_amounts
-
-import logging
+from service.tasks.rates_fetcher import get_rates
 
 logger = logging.getLogger("lifespan")
 
@@ -22,4 +21,3 @@ async def lifespan(app: FastAPI):
     task_rates.cancel()
     task_monitor.cancel()
     logger.info("Background tasks cancelled.")
-

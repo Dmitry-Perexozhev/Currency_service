@@ -1,9 +1,11 @@
+import logging
+
 from fastapi import Request, Response
 
 from service.storage.config_storage import config_storage
-import logging
 
 logger_root = logging.getLogger("console")
+
 
 async def log_requests(request: Request, call_next):
 
