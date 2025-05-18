@@ -30,6 +30,10 @@ git clone git@github.com:Dmitry-Perexozhev/Currency_service.git
 ```
 cd Currency_service
 ```
+3. Activate virtual environment:
+```
+poetry shell
+```
 3. Install dependencies using Poetry (make sure Poetry is installed):
 ```
 poetry install
