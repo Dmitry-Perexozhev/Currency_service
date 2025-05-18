@@ -47,7 +47,9 @@ def parse_args():
                 print(msg)
             i += 2
         else:
-            i += 1
+            msg = f"Invalid argument format"
+            logger.error(msg)
+            raise ValueError(msg + ". Enter arguments in the form --currency value. Example --usd 1000")
 
     if not balances:
         logger.error("No currency specified")
