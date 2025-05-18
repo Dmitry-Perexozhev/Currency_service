@@ -1,9 +1,5 @@
 __pycache__
 .venv/
-.coverage
-coverage.xml
 .pytest_cache/
 .env
-.idea/
-db.sqlite3
 service/logs/*.log
